@@ -29,6 +29,27 @@ fi
 echo -e "\nGuess the secret number between 1 and 1000:"
 
 read guess
+
+guess_validator() {
+
+  local validated_guess=$1
+
+  while [[ true ]]; do
+    if [[ $validated_guess =~ ^[[:digit:]]+$ ]]; then
+      echo -e "\nThe guess is a pure integer."
+      break
+    else
+      echo -e "\nThat is not an integer, guess again:"
+      read validated_guess
+    fi
+  done
+
+  echo -e "\nExiting the guess_validator function. The validated guess is: $validated_guess\n"
+
+}
+
+guess_validator $guess
+
 number_of_guesses=0
 
 while [[ true ]]; do
@@ -39,10 +60,14 @@ while [[ true ]]; do
     echo -e "\nIt's higher than that, guess again:"
 
     read guess
+    guess_validator $guess
+
   elif (( guess > $random_num )); then
     echo -e "\nIt's lower than that, guess again:"
     
     read guess
+    guess_validator $guess
+
   else
     echo "You guessed it in $number_of_guesses tries. The secret number was $random_num. Nice job!"
 
