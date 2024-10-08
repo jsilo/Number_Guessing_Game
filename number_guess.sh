@@ -71,3 +71,19 @@ while true; do
     break
   fi
 done
+
+# Record the results for the username
+
+username_stats_command_string="UPDATE usernames
+  SET games_played = games_played + 1,
+  best_game =
+    CASE
+      WHEN best_game IS NULL THEN $number_of_guesses
+      WHEN $number_of_guesses < best_game THEN $number_of_guesses
+      ELSE best_game
+    END
+  WHERE username = '$username';"
+
+# Update the database
+
+$PSQL "$username_stats_command_string"
